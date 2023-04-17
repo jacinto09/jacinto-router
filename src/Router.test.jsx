@@ -2,10 +2,13 @@ import { cleanup, render, screen } from '@testing-library/react'
 import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { Router } from './Router'
 import { getCurrentPath } from './utils'
+import { Route } from './Route'
+import { Link } from './Link'
 
 vi.mock('./utils', () => ({
   getCurrentPath: vi.fn()
 }))
+
 describe('Router', () => {
   beforeEach(() => {
     cleanup()
@@ -33,5 +36,25 @@ describe('Router', () => {
     ]
     render(<Router routes={routes} />)
     expect(screen.getAllByText('About')).toBeTruthy()
+  })
+  it('should navigate using link', async () => {
+    getCurrentPath.mockReturnValueOnce('/')
+    render(
+      <Router>
+        <Route
+          path='/' Component={() => {
+            return (
+              <>
+                <h1>Home</h1>
+                <Link to='/about'>Go to About</Link>
+              </>
+            )
+          }}
+        />
+        <Route path='/about' Component={() => <h1>About</h1>} />
+      </Router>)
+    screen.getByText('Go to About').click()
+    const aboutTitle = await screen.findByText('About')
+    expect(aboutTitle).toBeTruthy()
   })
 })
