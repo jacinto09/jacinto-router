@@ -13,7 +13,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "prepare": "swc ./src/*.jsx -d lib && rm lib/App.js lib/main.js lib/Router.test.js && cp src/*.js lib/*.js",
+    "prepare": "swc ./src/*.jsx -d lib",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest"
